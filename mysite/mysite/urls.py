@@ -20,5 +20,5 @@ from kanbanrestbot import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('kanbanrestbot/', admin.site.urls),
+    path('random/', views.RandomTask.as_view()),
 ]

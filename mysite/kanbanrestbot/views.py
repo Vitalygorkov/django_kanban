@@ -16,7 +16,7 @@ class TaskSerializator(serializers.ModelSerializer):
         fields = ['task_name', 'task_text']
 
 class RandomTask(APIView):
-    def get(self, **args, **kwargs):
+    def get(self, *args, **kwargs):
         all_tasks = models.Task.objects.all()
         random_task = random.choice(all_tasks)
         serialized_random_task = TaskSerializator(random_task, many=False)
