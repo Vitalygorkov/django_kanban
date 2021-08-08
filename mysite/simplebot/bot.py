@@ -6,21 +6,34 @@ from aiogram.utils import executor
 from config import TOKEN
 
 import sqlalchemy
-# from sqlalchemy import create_engine
+from sqlalchemy import create_engine
 engine = create_engine('sqlite:///:memory:', echo=True)
 print("Версия SQLAlchemy:", sqlalchemy.__version__)
 
-# from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey
+from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey
 metadata = MetaData()
 users_table = Table('tasks', metadata,
     Column('id', Integer, primary_key=True),
     Column('task_name', String),
     Column('task_text', String),
-    Column('tsk_rating', String),
-    Column('tsk_category', String),
-    Column('tsk_status', String)
+    Column('task_rating', String),
+    Column('task_category', String),
+    Column('task_status', String)
 )
 metadata.create_all(engine)
+
+class Task(object):
+    def __init__(self, task_name, task_text, task_rating, task_category, task_status):
+        self.task_name = task_name
+        self.task_text = task_text
+        self.task_rating = task_rating
+        self.task_category = task_category
+        self.task_status) = task_status)
+
+    def __repr__(self):
+        return "<Task('%s', '%s', '%s', '%s', '%s')>" % (self.task_name, self.task_text, self. task_rating, self.task_category, self.task_status)
+
+
 
 
 bot = Bot(token=TOKEN)
