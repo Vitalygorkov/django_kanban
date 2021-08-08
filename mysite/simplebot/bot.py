@@ -28,7 +28,7 @@ class Task(object):
         self.task_text = task_text
         self.task_rating = task_rating
         self.task_category = task_category
-        self.task_status) = task_status)
+        self.task_status = task_status
 
     def __repr__(self):
         return "<Task('%s', '%s', '%s', '%s', '%s')>" % (self.task_name, self.task_text, self. task_rating, self.task_category, self.task_status)
