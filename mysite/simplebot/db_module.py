@@ -24,3 +24,8 @@ class Task(object):
 
 # mapper(Task, tasks_table)
 print(mapper(Task, tasks_table))
+
+task1 = Task('make a bot for processing tasks', 'master the use of orm databases, write command handlers and bot logic')
+
+print(task1)
+print(task1.id)
