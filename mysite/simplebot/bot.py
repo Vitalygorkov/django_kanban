@@ -86,7 +86,9 @@ async def process_help_command(message: types.Message):
 
 @dp.message_handler()
 async def echo_message(msg: types.Message):
-    add_task(str(msg.text), 'task description')
+    task_name = str(msg.text).split('/')[0]
+    task_description = str(msg.text).split('/')[1]
+    add_task(task_name, task_description)
     await bot.send_message(msg.from_user.id, msg.text)
 
 if __name__ == '__main__':

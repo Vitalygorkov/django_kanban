@@ -42,7 +42,15 @@ def add_task(name, description):
     session.commit()
     print(("'")+str(name)+("'")+'-task is written to the database')
 
-add_task('new task2', 'new task description2')
+# add_task('new task2', 'new task description2')
+
+task_string = 'Это задача/это описание задачи'
+
+task_name = task_string.split('/')[0]
+task_description = task_string.split('/')[1]
+print(task_name)
+print(task_description)
+
 
 # print(ourTask)
 # print(task1)
