@@ -34,6 +34,40 @@ from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
 from config import TOKEN
+from sqlalchemy import create_engine
+from sqlalchemy.orm import mapper, sessionmaker
+
+engine = create_engine('sqlite:///bot_database.db')
+Session = sessionmaker(bind=engine)
+Session.configure(bind=engine)
+session = Session()
+
+from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey
+metadata = MetaData()
+tasks_table = Table('tasks', metadata,
+    Column('id', Integer, primary_key=True),
+    Column('name', String),
+    Column('description', String)
+                    )
+
+metadata.create_all(engine)
+
+
+class Task(object):
+    def __init__(self, name, description):
+        self.name = name
+        self.description = description
+
+    def __repr__(self):
+        return "<User('%s', '%s')>" % (self.name, self.description)
+
+mapper(Task, tasks_table)
+
+def add_task(name, description):
+    task = Task(name,description)
+    session.add(task)
+    session.commit()
+    print(("'")+str(name)+("'")+'-task is written to the database')
 
 
 
@@ -52,6 +86,7 @@ async def process_help_command(message: types.Message):
 
 @dp.message_handler()
 async def echo_message(msg: types.Message):
+    add_task(str(msg.text), 'task description')
     await bot.send_message(msg.from_user.id, msg.text)
 
 if __name__ == '__main__':
