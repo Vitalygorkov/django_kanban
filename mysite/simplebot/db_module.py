@@ -33,6 +33,8 @@ task1 = Task('make a bot for processing tasks', 'master the use of orm databases
 session = Session()
 session.add(task1)
 ourTask = session.query(Task).first()
+session.commit()
+
 print(ourTask)
 
 
