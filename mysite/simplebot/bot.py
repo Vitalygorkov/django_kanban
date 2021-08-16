@@ -43,10 +43,12 @@ Session.configure(bind=engine)
 session = Session()
 
 from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey
+from sqlalchemy.types import Boolean
 metadata = MetaData()
 tasks_table = Table('tasks', metadata,
     Column('id', Integer, primary_key=True),
     Column('name', String),
+    Column('completed', Boolean),
     Column('description', String)
                     )
 
@@ -54,17 +56,18 @@ metadata.create_all(engine)
 
 
 class Task(object):
-    def __init__(self, name, description):
+    def __init__(self, name, completed, description):
         self.name = name
+        self.completed = completed
         self.description = description
 
     def __repr__(self):
-        return "<User('%s', '%s')>" % (self.name, self.description)
+        return "<User('%s', '%s', '%s')>" % (self.name, self.completed, self.description)
 
 mapper(Task, tasks_table)
 
 def add_task(name, description):
-    task = Task(name,description)
+    task = Task(name, False, description)
     session.add(task)
     session.commit()
     print(("'")+str(name)+("'")+'-task is written to the database')
@@ -93,7 +96,7 @@ async def echo_message(msg: types.Message):
         add_task(task_name, task_description)
         await bot.send_message(msg.from_user.id, "Задача добавленна: "+task_name)
     else:
-        text_task = ''
+        text_task = 'Список:\n'
         for instance in session.query(Task).order_by(Task.id):
             text_task += '\n' + str(instance.id) + ' ' + instance.name
             print(instance.id, instance.name, instance.description)
