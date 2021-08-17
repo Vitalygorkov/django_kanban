@@ -103,11 +103,16 @@ async def echo_message(msg: types.Message):
     elif msg.text.lower().split(' ')[0] == 'уд':
         del_id = msg.text.lower().split(' ')[1]
         print(del_id)
-        del_query = session.query(Task).filter(Task.id == del_id)
-        for instance in del_id:
+        del_query = session.query(Task).filter(Task.id == int(del_id))
+        instance_text = ''
+        for instance in del_query:
+            instance_text += str(instance.name)
             print(instance)
+            print(instance.name)
         print(del_query)
-        await bot.send_message(msg.from_user.id, "Запрос на удаление :" + str(del_query))
+        del_query.delete()
+        # del_query.commit()
+        await bot.send_message(msg.from_user.id, "Запрос на удаление :" + instance_text)
     else:
         task_name = str(msg.text).split('/')[0]
         task_description = str(msg.text).split('/')[1]
