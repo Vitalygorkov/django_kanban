@@ -75,6 +75,8 @@ def add_task(name, description):
 
 
 
+
+
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
 
@@ -90,12 +92,7 @@ async def process_help_command(message: types.Message):
 
 @dp.message_handler()
 async def echo_message(msg: types.Message):
-    if msg.text.lower() != 'список':
-        task_name = str(msg.text).split('/')[0]
-        task_description = str(msg.text).split('/')[1]
-        add_task(task_name, task_description)
-        await bot.send_message(msg.from_user.id, "Задача добавленна: "+task_name)
-    else:
+    if msg.text.lower() == 'список':
         text_task = 'Список:\n'
         for instance in session.query(Task).order_by(Task.id):
             text_task += '\n' + str(instance.id) + ' ' + instance.name
@@ -103,6 +100,19 @@ async def echo_message(msg: types.Message):
 
         print(text_task)
         await bot.send_message(msg.from_user.id, text_task)
+    elif msg.text.lower().split(' ')[0] == 'уд':
+        del_id = msg.text.lower().split(' ')[1]
+        print(del_id)
+        del_query = session.query(Task).filter(Task.id == del_id)
+        for instance in del_id:
+            print(instance)
+        print(del_query)
+        await bot.send_message(msg.from_user.id, "Запрос на удаление :" + str(del_query))
+    else:
+        task_name = str(msg.text).split('/')[0]
+        task_description = str(msg.text).split('/')[1]
+        add_task(task_name, task_description)
+        await bot.send_message(msg.from_user.id, "Задача добавленна: "+task_name)
 
 if __name__ == '__main__':
     executor.start_polling(dp)
