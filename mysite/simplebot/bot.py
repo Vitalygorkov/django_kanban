@@ -95,7 +95,7 @@ async def echo_message(msg: types.Message):
     if msg.text.lower() == 'список':
         text_task = 'Список:\n'
         for instance in session.query(Task).order_by(Task.id):
-            text_task += '\n' + str(instance.id) + ' ' + instance.name
+            text_task += '\n' + str(instance.id) + ' ' + instance.name + ' ' + str(instance.completed)
             print(instance.id, instance.name, instance.description)
 
         print(text_task)
@@ -113,6 +113,19 @@ async def echo_message(msg: types.Message):
         del_query.delete()
         # del_query.commit()
         await bot.send_message(msg.from_user.id, "Запрос на удаление :" + instance_text)
+    elif msg.text.lower().split(' ')[0] == 'вып':
+        complete_id = msg.text.lower().split(' ')[1]
+        print(complete_id)
+        complete_query = session.query(Task).filter(Task.id == int(complete_id))
+        for instance in complete_query:
+            print(instance)
+        complete_query.update({Task.completed: 1})
+        session.commit()
+        complete_text = ''
+        for instance in complete_query:
+            print(instance)
+            complete_text +=  str(instance)
+        await bot.send_message(msg.from_user.id, "Задача выполнена: " + complete_text)
     else:
         task_name = str(msg.text).split('/')[0]
         task_description = str(msg.text).split('/')[1]
