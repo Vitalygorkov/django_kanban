@@ -112,7 +112,7 @@ async def echo_message(msg: types.Message):
         print(del_query)
         del_query.delete()
         # del_query.commit()
-        await bot.send_message(msg.from_user.id, "Запрос на удаление :" + instance_text)
+        await bot.send_message(msg.from_user.id, "Удаление задачи из базы:" + instance_text)
     elif msg.text.lower().split(' ')[0] == 'вып':
         complete_id = msg.text.lower().split(' ')[1]
         print(complete_id)
